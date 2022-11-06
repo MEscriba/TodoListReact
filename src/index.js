@@ -1,0 +1,30 @@
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import cors from "cors";
+import express from "express";
+import { initDB } from "./db/index.js";
+import ToDosRequestHandler from "./handlers/todos.js";
+
+
+const Api = express();
+
+Api.use(express.json());
+Api.use(express.urlencoded({ extended: false }));
+
+Api.use(cors());
+Api.use("/v1", ToDosRequestHandler);
+
+Api.listen(3000, () => {
+  console.log("API IS RUNNING");
+  initDB().then(() => {
+    console.log("DB IS READY");
+  });
+});
+
+ReactDOM.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  document.getElementById("root")
+);
